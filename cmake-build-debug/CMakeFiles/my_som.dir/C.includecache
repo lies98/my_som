@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/liesamarouche/Downloads/my_som/data.c
+data.h
+/Users/liesamarouche/Downloads/my_som/data.h
+list.h
+/Users/liesamarouche/Downloads/my_som/list.h
+
+/Users/liesamarouche/Downloads/my_som/data.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+math.h
+-
+assert.h
+-
+
+/Users/liesamarouche/Downloads/my_som/list.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+assert.h
+-
+data.h
+/Users/liesamarouche/Downloads/my_som/data.h
+
