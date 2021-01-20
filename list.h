@@ -27,6 +27,10 @@ list list_allocation(int size);
 list list_contructor();
 int size(list l) ;;
 position back(list l);
+position front(list l);
 void push_back(list l, position data);
+void pop_front(list l);
 void pop_back(list l);
+position getList(list l, unsigned int index);
+void clear(list l);
 #endif //MY_SOM_LIST_H

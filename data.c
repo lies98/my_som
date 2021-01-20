@@ -4,6 +4,7 @@
 
 #include "data.h"
 #include "list.h"
+#include <float.h>
 
 //load data file
 iris_data save_data_file(){
@@ -81,13 +82,16 @@ double * average_vector(iris_data iris){
 
 
 
-//randomize in certain range min max
-double rand_range(double feature,double min, double max)
+
+double randfrom(double min, double max)
 {
     double range = (max - min);
     double div = RAND_MAX / range;
-    return  feature + min + ((double)rand() / div);
+    return min + (rand() / div);
 }
+
+
+
 
 //peak random index in table
 int * randomize(){
@@ -121,7 +125,7 @@ processing_units init_processing_units_network_matrix(iris_data data){
         for (int j= 0; j< MATRIX_NB_COLUMN; ++j){
             network->units[i][j].spec = malloc(SPEC_SIZE * sizeof(* network->units[i][j].spec));
             for (int k = 0; k < SPEC_SIZE; ++k){
-                double val=rand_range(av_vector[k],0.05, 0.05);
+                double val=randfrom(av_vector[k] + 0.05,av_vector[k] - 0.05);
                 network->units[i][j].spec[k] = val;
             }
             network->units[i][j].label = NULL;
@@ -147,25 +151,18 @@ list best_match_unit_s(processing_units network, double * vec){
     neurone_winner_coord.j=0;
 
     double distance_min,distance_;
-    distance_min=distance(vec, network->units[0][0].spec);
-    for (int l= 0; l <MATRIX_NB_LINE; ++l){
-        for(int c=1; c < MATRIX_NB_COLUMN; ++c){
-            distance_ = distance(vec, network->units[l][c].spec);
-            if(distance_ < distance_min){
-                distance_min = distance_;
-                neurone_winner_coord.i=l;
-                neurone_winner_coord.j=c;
-            }
-        }
-    }
-    push_back(winners, neurone_winner_coord);
+    distance_min=DBL_MAX;
 
     for (int l= 0; l <MATRIX_NB_LINE; ++l){
         for(int c=0; c < MATRIX_NB_COLUMN; ++c){
             distance_ = distance(vec, network->units[l][c].spec);
-            if(distance_ == distance_min && (l!=neurone_winner_coord.i&&c!=neurone_winner_coord.j)){
-                neurone_winner_coord.i=l;
-                neurone_winner_coord.j=c;
+            if(distance_ <= distance_min){
+                if(distance_ < distance_min) {
+                    clear(winners);
+                    distance_min = distance_;
+                    neurone_winner_coord.i = l;
+                    neurone_winner_coord.j = c;
+                }
                 push_back(winners, neurone_winner_coord);
             }
         }
@@ -175,16 +172,6 @@ list best_match_unit_s(processing_units network, double * vec){
 }
 
 
-//fonction pour tirer un neurone au hasard dans une liste
-position unit_selection(list l, int nb_iteration){
-    position n;
-    n=back(l);
-    for(int i=0;i<nb_iteration;i++){
-        pop_back(l);
-        n=back(l);
-    }
-    return n;
-}
 
 
 //fonction d'collaboration selon le rayon
@@ -214,8 +201,9 @@ void learning(iris_data iris_data, processing_units network, double alpha0, int 
         peak_random_index_tab= randomize();
         for (int i = 0; i < DATA_SIZE; ++i){
             double *v = iris_data[peak_random_index_tab[i]].spec;
-            winner_coord= unit_selection(best_match_unit_s(network, v), rand() % size(best_match_unit_s(network, v)));
-
+            list list_of_winner = best_match_unit_s(network, v);
+            int sizeliste = size(list_of_winner);
+            winner_coord= getList(list_of_winner, randfrom(0,sizeliste));
             for(int i=0;i<4;i++){
                 adjacent_units[i]=0;
             }

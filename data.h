@@ -23,12 +23,20 @@ struct iris_input_data_unit
     char *label;
     double norm;
 };
+
 typedef struct iris_input_data_unit iris_input_data_unit_t;
 typedef struct iris_input_data_unit* iris_data;
 
+struct neurone{
+    double *spec;
+    char *label;
+};
+
+typedef struct neurone neurone;
+
 //structure pour representer la matrice des units
 struct network{
-    iris_input_data_unit_t ** units;
+    neurone ** units;
 };
 typedef struct network* processing_units;
 

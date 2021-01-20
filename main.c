@@ -14,9 +14,8 @@ int main(){
     data = save_data_file();
     network= init_processing_units_network_matrix(data);
 
-    learning(data, network, 0.9, 3, 3000);
-    learning(data, network, 0.09, 2, 1000);
-    learning(data, network, 0.009, 1, 1000);
+    learning(data, network, 0.9, 3, 500);
+    learning(data, network, 0.09, 1, 1500);
 
     classification(data, network);
 

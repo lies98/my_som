@@ -38,7 +38,10 @@ int size(list l) {
 position back(list l) {
     return l->prev->val;
 }
-//ajouter un elment a la fin de la liste
+position front(list l) {
+    return l->next->val;
+}
+//ajouter un element a la fin de la liste
 void push_back(list l, position data) {
     list cell;
     cell = list_allocation(sizeof(*cell));
@@ -57,4 +60,40 @@ void pop_back(list l) {
     l->prev->prev->next = l;
     l->prev = l->prev->prev;
     free(to_del);
+}
+//retire le premier element de la list
+void pop_front(list l) {
+    list to_del;
+    to_del = l->next;
+    l->next->next->prev = l;
+    l->next = l->next->next;
+    free(to_del);
+}
+
+position getList(list l, unsigned int index){
+
+    unsigned int count;
+    position it= l->next->val;
+
+    for(count = 0; count < index; ++count){
+        l = l->next;
+        it = l->next->val;
+    }
+
+
+    return it;
+
+
+}
+
+void clear(list l) {
+    list it, to_del;
+    it = l->next;
+    while(it != l) {
+        to_del = it;
+        it = it->next;
+        free(to_del);
+    }
+    l->next = l;
+    l->prev = l;
 }
